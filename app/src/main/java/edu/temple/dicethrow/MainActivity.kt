@@ -1,6 +1,7 @@
 package edu.temple.dicethrow
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -32,23 +33,33 @@ class MainActivity : AppCompatActivity(), ButtonFragment.ButtonInterface {
             - Show only Button Fragment if portrait
             - show both fragments if Landscape
           */
-        if(savedInstanceState==null)
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.container1,ButtonFragment())
-            .addToBackStack(null)
-            .setReorderingAllowed(true)
-            .commit()
+        if(savedInstanceState==null) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.container1, ButtonFragment())
+                .addToBackStack(null)
+                .setReorderingAllowed(true)
+                .commit()
+        }
+
+        if(findViewById<View>(R.id.container2) !=null){
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.container2,DieFragment())
+                .commit()
+        }
         dieViewModel.getDieRoll().observe(this){
+            if(!dieViewModel.hasseenRoll && !(findViewById<View>(R.id.container2) !=null))
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container1,DieFragment())
                 .addToBackStack(null)
                 .setReorderingAllowed(true)
                 .commit()
+            dieViewModel.hasseenRoll=true
         }
 
-        if()
+
     }
 
     /* TODO 2: switch fragments if portrait (no need to switch fragments if Landscape)
